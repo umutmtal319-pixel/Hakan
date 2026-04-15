@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="tr" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ahmet Hakan Arık</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #060810;
+            --surface: #0d1117;
+            --surface2: #131a24;
+            --border: rgba(99,179,237,0.12);
+            --accent: #38bdf8;
+            --accent2: #818cf8;
+            --accent3: #34d399;
+            --text: #e2e8f0;
+            --muted: #64748b;
+            --glow: rgba(56,189,248,0.15);
+        }
+        [data-theme="light"] {
+            --bg: #f0f4f8;
+            --surface: #ffffff;
+            --surface2: #e8f0fe;
+            --border: rgba(56,189,248,0.2);
+            --accent: #0284c7;
+            --accent2: #6366f1;
+            --accent3: #059669;
+            --text: #0f172a;
+            --muted: #64748b;
+            --glow: rgba(2,132,199,0.1);
+        }
+
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Syne', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            transition: background 0.4s ease, color 0.4s ease;
+            overflow-x: hidden;
+        }
+
+        /* Grid background */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(56,189,248,0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(56,189,248,0.03) 1px, transparent 1px);
+            background-size: 40px 40px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Glow orbs */
+        .orb {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(80px);
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.5;
+            transition: opacity 0.4s;
+        }
+        .orb-1 {
+            width: 400px; height: 400px;
+            background: radial-gradient(circle, rgba(56,189,248,0.15), transparent 70%);
+            top: -100px; right: -100px;
+        }
+        .orb-2 {
+            width: 300px; height: 300px;
+            background: radial-gradient(circle, rgba(129,140,248,0.12), transparent 70%);
+            bottom: 100px; left: -80px;
+        }
+        [data-theme="light"] .orb { opacity: 0.3; }
+
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 40px 24px 80px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* ── THEME TOGGLE ── */
+        .toggle-wrap {
+            display: flex;
+            justify-content: flex-end;
+            padding-top: 10px;
+            margin-bottom: 20px;
+        }
+        .theme-btn {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 50px;
+            padding: 8px 16px;
+            color: var(--muted);
+            font-family: 'Space Mono', monospace;
+            font-size: 0.7rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+            letter-spacing: 0.05em;
+        }
+        .theme-btn:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+            box-shadow: 0 0 12px var(--glow);
+        }
+        .theme-icon { font-size: 0.9rem; }
+
+        /* ── HEADER ── */
+        header {
+            padding: 30px 0 50px;
+            position: relative;
+            animation: fadeUp 0.9s ease both;
+        }
+        .tag-line {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.65rem;
+            color: var(--accent);
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .tag-line::before {
+            content: '//';
+            opacity: 0.5;
+        }
+
+        h1 {
+            font-size: clamp(3rem, 9vw, 5rem);
+            font-weight: 800;
+            line-height: 1.0;
+            letter-spacing: -2px;
+            margin-bottom: 6px;
+        }
+        .name-first { color: var(--text); }
+        .name-last {
+            color: transparent;
+            -webkit-text-stroke: 1.5px var(--accent);
+        }
+        [data-theme="light"] .name-last {
+            -webkit-text-stroke: 1.5px var(--accent);
+        }
+
+        .subtitle {
+            margin-top: 18px;
+            font-size: 0.9rem;
+            color: var(--muted);
+            font-family: 'Space Mono', monospace;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .subtitle::before {
+            content: '>';
+            color: var(--accent3);
+            animation: blink 1.2s step-end infinite;
+        }
+
+        @keyframes blink { 50% { opacity: 0; } }
+
+        /* ── SECTION ── */
+        section {
+            margin-bottom: 50px;
+            animation: fadeUp 0.9s ease both;
+        }
+        section:nth-child(2) { animation-delay: 0.1s; }
+        section:nth-child(3) { animation-delay: 0.2s; }
+        section:nth-child(4) { animation-delay: 0.3s; }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 24px;
+        }
+        .section-num {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.65rem;
+            color: var(--accent);
+            opacity: 0.7;
+        }
+        h2 {
+            font-size: 1.15rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--text);
+        }
+        .section-line {
+            flex: 1;
+            height: 1px;
+            background: linear-gradient(to right, var(--border), transparent);
+        }
+
+        .card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 28px;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+        .card:hover {
+            border-color: rgba(56,189,248,0.3);
+            box-shadow: 0 0 30px var(--glow);
+        }
+        .card p {
+            font-size: 0.95rem;
+            color: var(--muted);
+            line-height: 1.85;
+            font-weight: 400;
+        }
+
+        /* ── SKILLS ── */
+        .skills-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 16px;
+        }
+        .skill-item {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 20px 24px;
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .skill-item::after {
+            content: '';
+            position: absolute;
+            left: 0; top: 0; bottom: 0;
+            width: 3px;
+            background: var(--skill-color, var(--accent));
+            border-radius: 0 2px 2px 0;
+        }
+        .skill-item:hover {
+            border-color: var(--skill-color, var(--accent));
+            box-shadow: 0 0 20px color-mix(in srgb, var(--skill-color, var(--accent)) 20%, transparent);
+            transform: translateX(4px);
+        }
+        .skill-icon {
+            font-size: 1.5rem;
+            width: 44px;
+            height: 44px;
+            border-radius: 10px;
+            background: var(--surface2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        .skill-info { flex: 1; }
+        .skill-name {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 4px;
+        }
+        .skill-desc {
+            font-size: 0.78rem;
+            color: var(--muted);
+            font-family: 'Space Mono', monospace;
+            line-height: 1.4;
+        }
+        .skill-bar-wrap {
+            width: 80px;
+            flex-shrink: 0;
+        }
+        .skill-bar-bg {
+            height: 4px;
+            background: var(--surface2);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+        .skill-bar-fill {
+            height: 100%;
+            border-radius: 2px;
+            background: var(--skill-color, var(--accent));
+            animation: barGrow 1.2s ease both;
+            transform-origin: left;
+        }
+        @keyframes barGrow {
+            from { transform: scaleX(0); }
+            to   { transform: scaleX(1); }
+        }
+        .skill-pct {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.6rem;
+            color: var(--muted);
+            text-align: right;
+            margin-top: 4px;
+        }
+
+        /* ── CONTACT ── */
+        .contact-list { display: flex; flex-direction: column; gap: 12px; }
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            text-decoration: none;
+            padding: 16px 20px;
+            border-radius: 12px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .contact-item::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(90deg, var(--accent) 0%, var(--accent2) 100%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .contact-item:hover::before { opacity: 1; }
+        .contact-item:hover { transform: translateX(4px); box-shadow: 0 0 20px var(--glow); }
+        .contact-item:hover .c-type,
+        .contact-item:hover .c-val { color: white; }
+        .contact-icon {
+            font-size: 1rem;
+            position: relative;
+            z-index: 1;
+            width: 36px;
+            height: 36px;
+            display: flex; align-items: center; justify-content: center;
+            background: var(--surface2);
+            border-radius: 8px;
+            flex-shrink: 0;
+            transition: background 0.3s;
+        }
+        .contact-item:hover .contact-icon { background: rgba(255,255,255,0.2); }
+        .c-info { display: flex; flex-direction: column; position: relative; z-index: 1; }
+        .c-type { font-family: 'Space Mono', monospace; font-size: 0.6rem; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; transition: color 0.3s; }
+        .c-val { font-size: 0.9rem; font-weight: 600; color: var(--text); transition: color 0.3s; }
+        .c-arrow { margin-left: auto; color: var(--muted); position: relative; z-index: 1; font-family: 'Space Mono', monospace; font-size: 0.75rem; transition: all 0.3s; }
+        .contact-item:hover .c-arrow { color: white; transform: translateX(4px); }
+
+        /* ── FOOTER ── */
+        footer {
+            text-align: center;
+            padding-top: 30px;
+            font-family: 'Space Mono', monospace;
+            font-size: 0.6rem;
+            color: var(--muted);
+            letter-spacing: 0.15em;
+            opacity: 0.5;
+        }
+
+        /* ── ANIMATIONS ── */
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 600px) {
+            h1 { letter-spacing: -1px; }
+            .skill-bar-wrap { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+
+    <div class="container">
+
+        <div class="toggle-wrap">
+            <button class="theme-btn" onclick="toggleTheme()">
+                <span class="theme-icon" id="themeIcon">☀️</span>
+                <span id="themeLabel">LIGHT</span>
+            </button>
+        </div>
+
+        <header>
+            <div class="tag-line">Yapay Zeka & İçerik Üreticisi</div>
+            <h1>
+                <div class="name-first">Ahmet Hakan</div>
+                <div class="name-last">Arık</div>
+            </h1>
+            <div class="subtitle">Prompt mühendisliği & dijital içerik üretimi</div>
+        </header>
+
+        <section id="hakkimda">
+            <div class="section-header">
+                <span class="section-num">01</span>
+                <h2>Hakkımda</h2>
+                <div class="section-line"></div>
+            </div>
+            <div class="card">
+                <p>Teknoloji dünyasının dinamik yapısına ve özellikle üretken yapay zeka araçlarının profesyonel kullanımına büyük bir ilgi duyuyorum. İleri düzey prompt mühendisliği teknikleri ve modern yapay zeka sistemleri ile yaratıcı çözümler üretiyorum. Amacım, teknolojinin ve algoritmaların sunduğu sınırsız olasılıkları kullanarak dijital dünyada yenilikçi ve verimli adımlar atmaktır.</p>
+            </div>
+        </section>
+
+        <section id="beceriler">
+            <div class="section-header">
+                <span class="section-num">02</span>
+                <h2>Beceriler</h2>
+                <div class="section-line"></div>
+            </div>
+            <div class="skills-grid">
+
+                <div class="skill-item" style="--skill-color: #38bdf8;">
+                    <div class="skill-icon">🤖</div>
+                    <div class="skill-info">
+                        <div class="skill-name">Yapay Zeka Araçları</div>
+                        <div class="skill-desc">ChatGPT · Claude · Midjourney · Gemini</div>
+                    </div>
+                    <div class="skill-bar-wrap">
+                        <div class="skill-bar-bg">
+                            <div class="skill-bar-fill" style="width:90%; animation-delay:0.4s;"></div>
+                        </div>
+                        <div class="skill-pct">90%</div>
+                    </div>
+                </div>
+
+                <div class="skill-item" style="--skill-color: #f472b6;">
+                    <div class="skill-icon">🎵</div>
+                    <div class="skill-info">
+                        <div class="skill-name">Video / TikTok İçeriği</div>
+                        <div class="skill-desc">Kısa video · Trend analizi · Editing</div>
+                    </div>
+                    <div class="skill-bar-wrap">
+                        <div class="skill-bar-bg">
+                            <div class="skill-bar-fill" style="width:80%; animation-delay:0.6s; background:#f472b6;"></div>
+                        </div>
+                        <div class="skill-pct">80%</div>
+                    </div>
+                </div>
+
+                <div class="skill-item" style="--skill-color: #34d399;">
+                    <div class="skill-icon">✍️</div>
+                    <div class="skill-info">
+                        <div class="skill-name">İçerik Üretimi</div>
+                        <div class="skill-desc">Metin · Görsel · Sosyal medya stratejisi</div>
+                    </div>
+                    <div class="skill-bar-wrap">
+                        <div class="skill-bar-bg">
+                            <div class="skill-bar-fill" style="width:85%; animation-delay:0.8s; background:#34d399;"></div>
+                        </div>
+                        <div class="skill-pct">85%</div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <section id="iletisim">
+            <div class="section-header">
+                <span class="section-num">03</span>
+                <h2>İletişim</h2>
+                <div class="section-line"></div>
+            </div>
+            <div class="contact-list">
+                <a href="tel:05359265710" class="contact-item">
+                    <div class="contact-icon">📞</div>
+                    <div class="c-info">
+                        <span class="c-type">Telefon</span>
+                        <span class="c-val">0535 926 57 10</span>
+                    </div>
+                    <span class="c-arrow">→</span>
+                </a>
+                <a href="mailto:hakanarik677@gmail.com" class="contact-item">
+                    <div class="contact-icon">📧</div>
+                    <div class="c-info">
+                        <span class="c-type">E-Posta</span>
+                        <span class="c-val">hakanarik677@gmail.com</span>
+                    </div>
+                    <span class="c-arrow">→</span>
+                </a>
+                <a href="https://www.tiktok.com/@ahmetq.71" target="_blank" rel="noopener" class="contact-item">
+                    <div class="contact-icon">🎵</div>
+                    <div class="c-info">
+                        <span class="c-type">TikTok</span>
+                        <span class="c-val">@ahmetq.71</span>
+                    </div>
+                    <span class="c-arrow">→</span>
+                </a>
+            </div>
+        </section>
+
+        <footer>© 2025 AHMET HAKAN ARIK — ALL RIGHTS RESERVED</footer>
+
+    </div>
+
+    <script>
+        function toggleTheme() {
+            const html = document.documentElement;
+            const isDark = html.getAttribute('data-theme') === 'dark';
+            html.setAttribute('data-theme', isDark ? 'light' : 'dark');
+            document.getElementById('themeIcon').textContent = isDark ? '🌙' : '☀️';
+            document.getElementById('themeLabel').textContent = isDark ? 'DARK' : 'LIGHT';
+        }
+    </script>
+</body>
+</html>
